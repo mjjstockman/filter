@@ -4,6 +4,7 @@
  * command node filter.js in the terminal
  */
 
+// FILTER METHOD ALWAYS RETURNS AN ARRAY!!!!!!
 
 // Simple Filtering
 const people = [
@@ -21,6 +22,32 @@ const people = [
   },
 ];
 
+// call the filter method on the people array and pass it a callback function.  
+// filter the array by using filter method on the array to return all over 21,
+// takes person as the param and returns their age if over 21
+const oldEnough = people.filter(person => person.age >= 21);
+// console.log(oldEnough);
+
+
+//  find the objects in an array of objects that contain a specific property. 
+// eg.  get paul out of the array of people above?
+
+// make new var named paul which filters the array people to those with first name 'Paul'
+const paul = people.filter(person => person.name === 'Paul');
+// returns an array of the paul object
+// console.log(paul);
+// if want paul obj, add [0]
+const paulObj = people.filter(person => person.name === 'Paul')[0];
+// console.log(paulObj);
+
+
+// shorten further by using p for person in the call back
+const paulShort = people.filter(p => p.name === 'Paul');
+// console.log(paulShort);
+
+
+// fliltering can get complex, so often put the callback function (the part...
+// that does the actual filtering) defined outside the call to the filter method
 
 // Complex Filtering
 const students = [
@@ -55,3 +82,41 @@ const students = [
     ]
   },
 ];
+
+
+// want only those with at least 5 years experience in a skill set
+// (naming those with over 5 yrs stongSkills)
+
+// previous way
+
+const candidates1 = students.filter(student => {
+  let strongSkills = student.skills.filter(skill => skill.yrsExperience >= 5);
+  //  filter always returns an array, even if empty
+  // so there will be an array for Ariel, but will be empty as no stong skills.
+  return strongSkills.length > 0;
+})
+
+console.log(candidates1);
+
+// BETTER WAY: if have complext callback
+//  extract the callback into it's own finction
+// ie. take what was in parentheses and asign it to a var.  Isolates the callback
+//  function making it cleaner and reusable.
+// COULD ALSO DO SAME FOR "skill => skill.yrsExperience >= 5"
+
+const hasStrongSkills1 = student => {
+  let strongSkills = student.skills.filter(skill => skill.yrsExperience >= 5);
+  return strongSkills.length > 0;
+}
+const candidatesBetter = students.filter(hasStrongSkills1);
+console.log(candidatesBetter);
+
+// COULD ALSO DO SAME FOR "skill => skill.yrsExperience >= 5"
+const has5yearsExp = skill => skill.yrsExperience >= 5;
+const hasStrongSkills = student => student.skills.filter(has5yearsExp).length > 0;
+const candidates = students.filter(hasStrongSkills);
+console.log(candidates);
+
+// use map to show just names
+const names = candidates.map(student => student.name);
+console.log(names);
